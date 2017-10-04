@@ -1,5 +1,4 @@
 let braintree = require('braintree');
-
 let gateway = braintree.connect({
   environment: braintree.Environment.Sandbox,
   merchantId:  process.env.BRAINTREE_MERCHANT_ID,
@@ -7,4 +6,4 @@ let gateway = braintree.connect({
   privateKey:  process.env.BRAINTREE_PRIVATE_KEY
 })
 
-module.exports = gateway;
+module.exports = { gateway };
