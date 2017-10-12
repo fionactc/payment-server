@@ -1,12 +1,11 @@
 let express = require("express");
 let router = new express.Router();
 
-// let gateway = require('./braintree');
-// let axios   = require('axios');
-
 let request = require('request');
 let paypal  = require('paypal-rest-sdk');
 
+let mongoUtil = require('./db');
+let db        = mongoUtil.getDb();
 
 router.post('/paypal-checkout', (req, res)=>{
   let creditCard = req.body.creditCard;

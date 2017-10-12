@@ -1,6 +1,8 @@
 let express = require("express");
 let router = new express.Router();
 let redis = require('../redis');
+let mongoUtil = require('../db');
+let db = mongoUtil.getDb();
 
 let paypal = require('../lib/paypal').paypal;
 
@@ -42,6 +44,10 @@ router.post('/checkout', (req, res)=>{
         amount
       };
       redis.set(payment.id, JSON.stringify(paymentRecord));
+
+      // insert to mongo with id
+      paymentRecord['_id'] = payment.id;
+      db.collection('payments').insert(paymentRecord);
 
       res.send({ id: payment.id, paymentRecord});
     }

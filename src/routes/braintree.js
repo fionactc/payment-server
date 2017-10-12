@@ -1,6 +1,8 @@
 let express = require("express");
 let router = new express.Router();
 let redis = require('../redis');
+let mongoUtil = require('../db');
+let db = mongoUtil.getDb();
 
 let gateway = require('../lib/braintree').gateway;
 
@@ -36,6 +38,10 @@ router.post('/checkout', (req, res)=>{
         amount
       }
       redis.set(result.transaction.id, JSON.stringify(paymentRecord));
+
+      // insert to mongo with id
+      paymentRecord['_id'] = result.transaction.id;
+      db.collection('payments').insert(paymentRecord);
 
       res.send({ id: result.transaction.id, paymentRecord});
     }
